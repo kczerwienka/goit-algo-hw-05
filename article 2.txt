@@ -1,0 +1,645 @@
+Received July 28, 2020, accepted August 8, 2020, date of publication August 12, 2020, date of current version August 21, 2020.
+Digital Object Identifier 10.1109/ACCESS.2020.3015976
+
+
+
+
+Surface Optimal Path Planning Using an Extended
+Dijkstra Algorithm
+MIN LUO           1,2 ,   XIAORONG HOU                  1,   AND JING YANG1
+1 School of Automation Engineering, University of Electronic Science and Technology of China, Chengdu 611731, China
+2 School of Electrical Engineering and Information, Southwest Petroleum University, Chengdu 610500, China
+
+Corresponding author: Xiaorong Hou (houxr@uestc.edu.cn)
+
+
+
+
+  ABSTRACT Extensive studies have been conducted on the Dijkstra algorithm owing to its bright prospect.
+  However, few of them have studied the surface path planning of mobile robots. Currently, some application
+  fields (e.g., wild ground, planet ground, and game scene) need to solve the optimal surface path. This
+  paper proposes an extended Dijkstra algorithm. We utilize the Delaunay triangulation to model the surface
+  environment. Based on keeping the triangle side length unchanged, the triangle mesh on the surface is
+  equivalently converted into a triangle on the two-dimensional plane. Through this transformation, we set
+  up the two-dimensional developable passable channel of the surface and solve the optimal route on this
+  channel. Traversing all the two-dimensional developable and passable paths of the surface, we can get the
+  shortest route among all the optimal paths. Then the inverse transformation from the two-dimensional plane
+  coordinates to the corresponding surface coordinates obtains the surface optimal path. The simulation results
+  show that, compared with the traditional Dijkstra algorithm, this method improves the accuracy of the surface
+  optimization path in single-robot single-target and multi-robot multi-target path planning tasks.
+
+
+  INDEX TERMS Dijkstra algorithm, path planning, surface, Delaunay triangulation, mobile robots, opti-
+  mization methods.
+
+
+
+
+I. INTRODUCTION                                                                                constraints at the same time. This research enabled GRTOP
+Dijkstra algorithm is a classical well-known shortest path                                     to reprogram traversal/task frequently, and optimized traver-
+routing algorithm in 2D mobile robots’ path planning                                           sal and task security. The authors exploited the diamond
+researches. It is a simple algorithm for the single-source                                     square algorithm to create realistic terrain in the surface
+shortest path problem, which can effectively calculate the                                     environment. The weight between two consecutive points was
+shortest path to all destinations [1]–[4].                                                     taken as the Euclidean distance between them. The Dijkstra
+   The Dijkstra algorithm was introduced by Dutch computer                                     algorithm was extended to consider multiple targets, and the
+scientist Edsger Wybe Dijkstra in 1959. It has been success-                                   weights between adjacent nodes were set as a linear combina-
+fully applied in fields like mobile robot 2D path planning,                                    tion of multiple weights. Each weight corresponded to a spe-
+computer science, geographic information science, and trans-                                   cific target. Through these methods, the Dijkstra algorithm
+portation, etc. Some recent research based on the Dijkstra                                     was applied to the calculation of a three-dimensional optimal
+algorithm is shown below [5]–[18].                                                             path and could be extended to multi-objective tasks.
+   Wolfgang Fink et al. adopted a multi-objective variant of                                      Dong Guo et al. improved the traditional Dijkstra algo-
+the Dijkstra algorithm based on terrain data to achieve the                                    rithm and combined it with the vehicle fuel consumption
+overall optimal traversal in the 3D surface (2019) [5]. The                                    and emission measurement model to reduce vehicle fuel
+gained results were employed in the Global Rover Hori-                                         consumption and emissions effectively during driving (2019)
+zontal Optimization Planner (GRTOP) automation system to                                       [6]. This method employed a rectangular area (the smallest
+quickly and accurately set up optimized routes for multiple                                    bounding rectangle of the ellipse) to limit the search area,
+                                                                                               thereby improving the efficiency of the Dijkstra’s algorithm.
+     The associate editor coordinating the review of this manuscript and                       According to the time of one day, the Dijkstra’s algorithm
+approving it for publication was Christopher Kitts            .                                and an established database were used to identify the traffic
+
+                     This work is licensed under a Creative Commons Attribution 4.0 License. For more information, see https://creativecommons.org/licenses/by/4.0/
+VOLUME 8, 2020                                                                                                                                                        147827
+                                                                  M. Luo et al.: Surface Optimal Path Planning Using an Extended Dijkstra Algorithm
+
+
+
+
+situation at the same time. The improved Dijkstra algorithm            (2018) [11]. Based on the path planning and driving strategy,
+could not only reduce vehicle fuel consumption and emis-               the optimal trajectory was generated by curve fitting technol-
+sions but also avoid time congestion. This method could                ogy, which fully considered the safety and dynamics of the
+be used for vehicle path planning based on dynamic traffic             driverless bus. This method could improve control accuracy,
+networks, reducing fuel consumption and emissions during               reduce the computational complexity, and promote driving
+driving, and improving urban environmental pollution.                  efficiency.
+   Felipe Ribeiro Souza et al. applied the Dijkstra’s method              Zheng Zhang et al. adopted an improved Dijkstra algo-
+to tree diagram analysis, using mining blocks as nodes of the          rithm to determine the initial path of each task in the
+tree for analysis, and used to calculate the lowest cost route         environment diagram describing the Automatic Guided
+to transport mining blocks to their destination (2019) [7].            Vehicle (AGV) in the grid method (2018) [12]. These authors
+The transportation cost was reflected in the arc of the graph,         proposed a collision-free routing method for AGVs in an
+and it could use Euclidean distance or transportation time to          automated warehouse based on collision classification. This
+calculate the minimum path. The results obtained by the Dijk-          method could deal with possible collisions in automated
+stra algorithm provided a non-operational path, to overcome            warehouses.
+this problem, adjustments were made through non-parametric                Feristah Dalkilic et al. used the Dijkstra’s algorithm to
+equations. In this way, the transportation cost of each block          reduce search space and runtime by applying stage-specific
+of the model could be determined. Paths based on Euclidean             rules and utilized the algorithm in an intelligent itinerary
+distance and transit time tended to increase for deeper mines.         planning system to assist passengers in itinerary planning
+Identifying the areas with the largest growth and quantifying          (2017) [13]. The paper introduced a progressive path search
+their value correctly could improve the efficiency of mining           algorithm to settle this problem, taking into account the num-
+planning.                                                              ber of transmissions and travel time. This method obtained
+   Afonso Henriques Moreira Santos et al. used graph theory            a trip planning system by integrating route and timetable
+and the Dijkstra’s shortest path algorithm for vertex location,        information from different transportation agencies. The sys-
+completed tower positioning based on dynamic programming               tem was managed to help users make better use of public
+to find the optimal vertex set along the route (2019) [8]. This        transportation to simplify trip planning.
+solution was used to solve the expansion planning problem                 Sai Shao et al. applied a dynamic Dijkstra algorithm to
+of the new Transmission Line (TL), and its goal was to find a          determine the shortest path between any two adjacent nodes
+design solution with minimum cost. This method utilized the            on the path (2017) [14]. The paper designed an electric vehi-
+Dijkstra’s shortest path algorithm to optimize the transmis-           cle routing scheme with variable charging time and travel
+sion line vertices and calculate the total cost from the source        time. Its purpose was to solve the dilemmas of electric vehicle
+node to the sink node. The results showed that this method             mileage limitation and charging demand.
+has a lower design cost than the original TL.                             Georgios K.D. Saharidis et al. combined the Dijkstra’s
+   Jesús Balado et al. applied the Dijkstra pathfinding algo-         algorithm with a Mixed Integer Linear Programming (MILP)
+rithm to the developed urban scene graph, and realized the             model to gain the optimal trip (2017) [15]. This multi-mode
+task of directly using point clouds in the urban environ-              path solution could make people prefer to accept the mini-
+ment for pathfinding (2019) [9]. The method proposed in                mum GreenHouse Gas (GHG) emission in various modes of
+the paper could automatically set up a graph representing              transportation when traveling. This method could be used in
+pedestrian navigable urban space, on which the safe and real           the construction plan of the public transportation operation
+routes of pedestrians under different movement skills could            platform to achieve the best travel route for cutting emissions.
+be calculated. The Dijkstra algorithm was utilized to develop             Tan Zhi et al. presented an improved ant colony algorithm
+safe routes in real-time graphics. The generated paths could           to balance the energy consumption of wireless sensor net-
+be employed to make valid obstacle avoidance routes for                works by studying the theory of Dijkstra’s algorithm (2015)
+pedestrians and wheelchairs.                                           [16]. The improved ant colony algorithm could increase the
+   Jinchuan Tang et al. studied the optimal path selection             life cycle of wireless sensor networks.
+method based on the Dijkstra algorithm and combined with                  W. C. Lu et al. used the Dijkstra’s algorithm to settle
+three probabilistic results for the design of Mission-Critical         the feasible air route planning issue, and the shortest path
+Push-To-Talk (MCPTT) system for 5G public safety disaster              between the earned airport and the training area could min-
+relief network (2019) [10]. The Dijkstra algorithm was used            imize the impact on the crowd and the threat to the aircraft
+to select the best connection, delay, and trust routing. Aiming        (2013) [17]. This paper aimed to explore the feasible air
+at the MCPTT system, the thesis proposed a routing method              routes for light sports aircraft to minimize the impact on
+based on connection, delay, and trust to provide the best              residential areas and the threat of terrain obstacles to the
+connection delay trust performance.                                    aircraft.
+   Based on the ArcGIS analysis tool, the Dijkstra algorithm              Deepak Gautam et al. applied the Dijkstra’s algorithm to
+was employed by Lingli Yu et al. for global path plan-                 bypass obstacles and locate the shortest path from a given
+ning to accomplish the path planning and navigation con-               initial position to the final position (2013) [18]. The pur-
+trol system design of 12 meters long driverless electric bus           pose of the paper to select the Dijkstra’s algorithm was
+
+147828                                                                                                                               VOLUME 8, 2020
+M. Luo et al.: Surface Optimal Path Planning Using an Extended Dijkstra Algorithm
+
+
+
+
+to study the path planning of quadrotor helicopters in a closed                     path attained by the method proposed in this paper is more
+known environment.                                                                  accurate, shorter, and smoother when calculating the optimal
+   The earlier improved Dijkstra algorithm mainly focused                           path of the surface. Especially for the case of a large number
+on the improvement of the time complexity of the traditional                        of nodes, a large per-unit scale, and a large surface rugged-
+Dijkstra algorithm and the promotion of the Dijkstra algo-                          ness, the optimal path obtained by the method proposed in
+rithm to different fields [19]–[26].                                                this paper has obvious advantages.
+   There are three main ways to improve the traditional Dijk-                          This article first presents the basic principle of the tra-
+stra algorithm. One is to analyze and improve the space                             ditional Dijkstra algorithm (Section 2). Second, it explains
+complexity of the algorithm to improve storage efficiency and                       the improved Dijkstra algorithm theory (Section 3). In this
+save space. The second is to analyze and improve the time                           part, we utilize the Delaunay triangulation method to con-
+complexity of the algorithm. The traditional Dijkstra algo-                         struct the surface map. The key to extending the classical
+rithm has low efficiency and long running time. To improve                          Dijkstra algorithm is the invariance of the triangle side length
+operating efficiency and reduce time complexity, many doc-                          when transforming a triangle on a surface into an equiva-
+uments have done a lot of work to improve this. The third                           lent triangle on a 2D plane. We convert the undevelopable
+aspect is to apply the algorithm to different fields, open up the                   surface channel into an equivalent two-dimensional passable
+application space of the algorithm and enrich the application                       channel, then solve the best path on the all two-dimensional
+field of the algorithm [5]–[26]. This article is to research                        passable channels, and finally obtain the best path of the
+in the third aspect, extending the Dijkstra algorithm to the                        surface through equivalent inverse transformation. We com-
+optimal path on the curved surface to obtain a more accurate                        pare the simulation results of different surface examples to
+shortest path.                                                                      verify the effectiveness of the extended Dijkstra algorithm
+   All the above studies are based on the Euclidean distance                        (Section 4). At the end of this paper, a conclusion is given
+between neighbor nodes in the Dijkstra algorithm path plan-                         (Section 5).
+ning [6]–[26]. The above papers rarely involve the optimal
+path of the surface [5]. Wolfgang Fink et al. utilized the                          II. THE TRADITIONAL DIJKSTRA ALGORITHM
+Dijkstra algorithm to solve the 3D surface path planning task,                          The initial work of the Dijkstra algorithm is only dealing
+they still used the Euclidean distance between the two nodes                        with the shortest path between two points. Mathematically,
+to calculate the optimal path, and their improvement was to                         these points must be represented by nodes in the graph net-
+take the weight as a composite factor, which comprehen-                             work. Bellman Ford implemented the possibility of fixing a
+sively considered the effects of three-dimensional Euclidean                        point and determining the shortest path to all other points in
+distance, smoothness, roughness, height change, and other                           the graph. Paul carried out a common practical application,
+factors.                                                                            using this algorithm to figure out the shortest path between
+   Many practical problems can be abstracted and trans-                             two cities, considering the street and highway to the destina-
+formed into the optimal surface path issue of mobile robots,                        tion. Sniedovich proposed a clear and structured step division
+such as the field rescue and material transportation route                          to determine the minimum path between two points in a node
+planning, the planetary ground exploration and development                          network [1]–[4].
+path planning, 3D game ground travel and war path planning,                             The Dijkstra algorithm (Algorithm 1) has a simple proce-
+etc. The disadvantage of employing the traditional Dijkstra                         dure. The essence of the traditional Dijkstra algorithm is to
+algorithm directly in surface path planning is that the cal-                        find out the shortest path between two nodes on a digraph
+culation of each intermediate path weight is based on the                           D = (N , W ), where N is the set of all nodes and W is the set of
+Euclidean distance between adjacent nodes, which will bring                         weighted edges of connected nodes. The Dijkstra algorithm
+about errors that cannot be ignored in the surface path plan-                       separates N into two sets, Ne and Nu . Ne is a set of all the
+ning. Because the optimal path obtained by calculating the                          end nodes of the determined shortest path to source node ns .
+Euclidean distance between nodes may not be on the surface,                         In the first step, Ne contains only ns . Nu is the set of nodes
+it is one of the most fundamental reasons for the optimal                           to ns with the undetermined shortest path. The nodes in Nu
+path error of the surface. All of these represent that new tools                    will be moved to Ne in ascending order of the shortest path
+and methods are required to improve the surface optimal path                        length of the source node ns until there are no nodes in the
+planning process based on the traditional Dijkstra algorithm.                       set Nu . The path that sequentially connects the source node
+The purpose of this paper is to establish a new general solu-                       ns to all edges of any node nti is the shortest path from ns to
+tion method with a higher precision, which is more suitable                         nti . The sum of the corresponding weights is the length of the
+for the solution of the optimal path of the surface than the                        Dijkstra algorithm’s shortest path. So, the shortest path from
+traditional Dijkstra model.                                                         the source node ns to the target node nt can be won.
+   The main contributions of this paper are as follows:                                 From Algorithm 1, we can see that the logic of the tra-
+1. Propose an approach for calculating the optimal path on a                        ditional Dijkstra algorithm is to find the Euclidean distance
+curved surface; 2. Improve the traditional Dijkstra algorithm                       between nodes, so it can be used to obtain the shortest path
+for calculating the optimal path on a curved surface; 3. When                       from the start point to the endpoint of a two-dimensional
+compared with the traditional Dijkstra algorithm, the optimal                       graph. However, when Algorithm 1 is directly applied to
+
+VOLUME 8, 2020                                                                                                                                147829
+                                                                         M. Luo et al.: Surface Optimal Path Planning Using an Extended Dijkstra Algorithm
+
+
+
+
+         FIGURE 1. Surface Delaunay triangulation model. (a) The original surface. (b) 169 nodes Delaunay triangulation model. (c) 625 nodes
+         Delaunay triangulation model.
+
+
+
+
+calculate the shortest path between two points on a curved                       The accuracy and resolution of the surface map depend on
+surface, the greater the curvature of the surface, the greater the            the size of the triangle mesh. The smaller the mesh, the higher
+error. The Euclidean distance between nodes and the distance                  the accuracy. The choice of mesh size depends on the needing
+between two points on the surface are two different issues.                   resolution requirement, as shown in Fig. 1.
+                                                                                 For a particular deterministic surface map, choosing a
+III. THE EXTENDED DIJKSTRA ALGORITHM                                          larger mesh size map grid cell means fewer nodes and less
+In this section, the extended Dijkstra algorithm is intro-                    resolution. Fig. 1 (a) shows an original surface map. And
+duced to resolve the surface optimal path planning task.                      Fig. 1 (b) shows an example of the large mesh size surface
+The extended Dijkstra algorithm is an algorithm to transfer                   map model of Fig. 1 (a), Fig. 1 (b) has 169 nodes to repre-
+surface terrain map into a 2D map along the passable paths                    sent the surface characteristics information. Similarly, Fig. 1
+based on the invariance of the triangle side length for surface               (c) shows an example of the small mesh size surface map
+Delaunay Triangulation grid map.                                              model of Fig. 1 (a), Fig. 1(c) has 625 nodes. Fig. 1 (c) has
+   The first step we shall do is to model a surface map by                    a higher resolution and can better represent the fluctuation
+the Delaunay triangulation method. Delaunay triangulation                     characteristics of the surface of Fig. 1 (a). Fig. 1 (b) has fewer
+is one of the most commonly used triangular mesh modeling                     nodes, less mathematical complexity, and less program cost
+methods. Compared with the square grid map, the Delaunay                      time. Therefore, in the actual design, the mesh size can be
+triangulation algorithm can provide more accurate surface                     reasonably selected according to the required accuracy and
+information, and generate a smoother path [27], [28]. Com-                    time cost.
+pared with the digital point cloud method, it is simpler and                     In Fig. 2 and Fig. 3, the red polygons are the obstructions
+more convenient.                                                              that the robot cannot travel, and the other areas inside the map
+   The expression of the Delaunay triangle mesh subdivision                   boundary are passable. The robot is R and the target is T. The
+algorithm makes each triangle unit has 12 adjacent units.                     numbers denoted in the Figs are the node serial numbers.
+Therefore, one non-boundary node can provide 12 feasible                         Fig. 2 (a) shows an original surface map example.
+motion directions, thus this method can provide a smooth                      The side length of each square (per-unit scale) is taken
+motion planning of the path. The Delaunay triangular grid                     as 0.25 in Fig. 2. Using the traditional Dijkstra algo-
+map method [29], [30] is a map representation method using                    rithm logic (Algorithm 1), we can get the black color
+the triangular mesh as the cartographic unit, which can well                  curve optimal path lts(1,6,11,16) . Because the traditional
+express the fluctuation characteristics of the surface.                       Dijkstra algorithm is based on the Euclidean distance
+
+147830                                                                                                                                      VOLUME 8, 2020
+M. Luo et al.: Surface Optimal Path Planning Using an Extended Dijkstra Algorithm
+
+
+
+
+             FIGURE 2. The extended Dijkstra algorithm theory diagram. (a) The original surface. (b) 16 nodes Dijkstra algorithm optimal
+             path (black color) and the extended Dijkstra algorithm equivalent 2D passable path (green color). (c) 16 nodes the extended
+             Dijkstra algorithm optimal path (magenta color).
+
+
+
+
+          FIGURE 3. Four algorithms optimal path length comparison diagram. (The extended Dijkstra algorithm proposed in this paper is
+          magenta solid line. The traditional Dijkstra algorithm is black solid line. The extended Dijkstra algorithm proposed in literature [5] is
+          green dotted line. The A* algorithm is blue dotted line.) (a) 169 nodes example. (b) 196 nodes example. (c) 225 nodes example.
+
+
+
+
+between adjacent pnodes, the optimal path obtained is                               Dsg = (Nsg , Wsg ), where Nsg is the set of all nodes and Wsg
+lp
+ ts(1,6,11,16)   =    (x1 − x6 )2 + (y1 − y6 )2 + (z1 − z6 )2 +                     is the set of weighted edges of connected nodes.
+               2            2              2                                           Then, we are going to introduce how to apply the invariant
+ p(x6 − x11 ) + (y6 − y11 ) + (z6 − z11 ) +
+   (x11 − x16 ) + (y11 − y16 ) + (z11 − z16 )2 . Obviously, we
+                2             2                                                     principle of triangular side length to convert a surface triangle
+can see from Fig. 2 (b), the black color curve optimal path                         into a triangle on the two-dimensional plane.
+lts(1,6,11,16) maybe above, below, or on the surface. This                               Shown in Fig. 2 (b), the surface nodes 1, 2, 5, 6 are
+causes errors in the optimal path of the surface.                                   forming two three-dimensional triangulations 1s(1,2,5) and
+    Next, we showed the extended Dijkstra algorithm logic                           1s(2,5,6) in white color. Keeping the invariance of the triangle
+theory in Algorithm 2. The core idea of the extended Dijkstra                       side length, using Algorithm 2, the equivalent triangulation
+algorithm is to find out the shortest path on a surface digraph                     1p(1,2,5) and 1p(2,5,6) in green color on the 2D plane can be
+
+
+VOLUME 8, 2020                                                                                                                                        147831
+                                                                           M. Luo et al.: Surface Optimal Path Planning Using an Extended Dijkstra Algorithm
+
+
+
+
+Algorithm 1 The Traditional Dijkstra Algorithm Framework                        Algorithm 2 The Extended Dijkstra Algorithm Framework
+Input:                                                                          Input:
+    A bidirected graph with weights D = (N , W ), the set                           A surface graph Dsg = (Nsg , Wsg ), the set of all nodes
+    of all nodes N , the set of weighted edges of connected                         Nsg , the set of weighted edges of connected nodes Wsg .
+    nodes W .                                                                       The source node nssg , R. The target node nstg , T.
+    The source node ns .                                                        Output:
+    The target node nt .                                                            Shortest surface paths and their lengths from the source
+Output:                                                                             node nssg to the target node nstg .
+    Shortest path and the length from the source node ns to                      1: Convert the triangle which has the R robot’s start point
+    the target node nt .                                                            on the surface into an equivalent triangle on a 2D plane
+ 1: Initialization.                                                                 based on keeping the triangle side length unchanged.
+    Visited nodes Ne = ns .                                                         Continue this process to find a two-dimensional equiv-
+    d(ns ) = 0,                                                                     alent triangle adjacent to the two-dimensional equivalent
+    where d(nti ) is the minimum cost of the shortest path                          triangle obtained in the previous step along a passable
+    from ns to nti .                                                                path from R to T until the last one tirangle with T node
+    Nu = N − Ne ,                                                                   as the triangle vertex found.
+    where Nu is the set of nodes to ns with the undetermined                     2: Get the 2D equivalent passable passage graph Ddgpi =
+    shortest path.                                                                  (Ndgpi , Wdgpi ), where Ndgpi is the set of all nodes and
+    d(nti ) = min(W (ns , nti )), if nti is a successor to ns , or else,            Wdgpi is the set of weighted edges of connected nodes
+    d(nti ) = ∞,                                                                    on the 2D equivalent passable passage graph.
+    where W (i, j) is the cost between node i and node j.                        3: Get the 2D source node ndsg , and the 2D target node ndtg .
+ 2: Repeat the following steps until there are no nodes in the                   4: Compute Wdgpi on the passable path in the two-
+    set Nu .                                                                        dimensional plane.
+    2.1 Put the node in Nu that have the minimum cost to the                        4.1 Initialization.
+    old ns as the new source ns . Move the new source node                          Visited nodes Nedgpi = ndsg .
+    ns to Ne ;                                                                      d(ndsg ) = 0, where d(ndtgpi ) is the minimum cost of the
+    2.2 Set d(nti ) = d(ns ) + min(W (ns , nti )).                                  shortest path from ndsg to ndtgpi .
+ 3: Find the shortest path from the source node ns to the                           Nudgpi = Ndgpi − Nedgpi , where Nudgpi is the the set of
+    target node nt .                                                                nodes to ndsg with the undetermined shortest path.
+ 4: return d(nt ), Ne .                                                             d(ndtgpi ) = min(W (ndgpi , ndtgpi )), if ndtgpi is a successor
+                                                                                    to ndsg , or else, d(ndtgpi ) = ∞, where Wdgpi (i, j) is the
+                                                                                    cost between the node i and j.
+                                                                                    4.2 Repeat the following steps until there are no nodes in
+found. In this way, the two-dimensional equivalent triangle                         the set Nudgpi :
+adjacent to the two-dimensional equivalent triangle obtained                        Set the node in Nudgpi that have the minimum cost to
+in the previous step continues to travel along the passable                         the old ndsg as the new source ndsg . Move the new
+passage from R to T until the last triangle with T node as                          source node ndsg to Nedgpi . Set d(ndtgpi ) = d(ndsg ) +
+the vertex of the triangle is obtained.                                             min(W (ndgpi , ndtgpi )).
+   According to Algorithm 2, holding the length of each side                     5: Find the other passable passage from R to T in a different
+of the triangle unchanged, the triangular meshes of the curved                      order, and repeat Step 1 - Step 4 until find the shortest
+surface can be sequentially transformed into triangles on the                       paths for all passable passages.
+two-dimensional plane one by one, to achieve an equivalent                       6: Compute d(nstg ) and Nesg of the surface by equivalent
+passable channel on the two-dimensional plane. Solve the                            inverse coordinate transformation from the shortest 2D
+best path of the two-dimensional equivalent passable tri-                           path.
+angular channel, and then traverse all the two-dimensional                       7: return d(nstg ), Nesg .
+passable channels to attain the optimal path from the starting
+point to the endpoint of the equivalent two-dimensional plane.
+Finally, a simple inverse conversion of equivalent coordinates
+can secure the optimal path of the equivalent surface.                          be moved to Nedgpi in ascending order of the shortest path
+   Ndgpi is the set of all 2D nodes and Wdgpi is the set of                     length of the source node ndsg until there are no nodes in
+weighted edges of connected nodes on the 2D passable pas-                       the set Nudgpi . The path that sequentially connects the source
+sage. Then, we separate Ndgpi into two sets, Nedgpi and Nudgpi .                node ndsg to all edges of any node ndtgpi is the shortest path
+Nedgpi is a set of all the end nodes of the determined shortest                 from ndsg to ndtgpi . The sum of the corresponding weights
+path to the equivalent 2D source node ndsg . In the first step,                 is the length of the 2D passable passage’s shortest path. So,
+Nedgpi contains the only ndsg . Nudgpi is the set of nodes to ndsg              the shortest path from the source node ndsg to the target node
+with an undetermined shortest path. The nodes in Nudgpi will                    ndtg can be won.
+
+147832                                                                                                                                        VOLUME 8, 2020
+M. Luo et al.: Surface Optimal Path Planning Using an Extended Dijkstra Algorithm
+
+
+
+
+    Employing this method and by extension, we can eas-                             factor parameters α = 1/3, β = 1/3, γ = 1/3 that can
+ily take the 2D equivalent expansion channel of a surface                           obtain a shorter path. For the A* algorithm, we compared the
+passable path from the robot R’s initial position to the tar-                       simulation results of a variety of heuristic functions H (n) and
+get T’s position. Thus, we can adapt the extended Dijkstra                          selected the H (n) that can obtain a shorter path, taking the
+algorithm (Algorithm 2) to work out the optimal path on                             Euclidean distance and the Manhattan distance into account.
+the acquired equivalent green 2D path below in Fig. 2 (b).
+A graph may have multiple passable channels. Computing                              TABLE 1. Four algorithms optimal path length comparison.
+all passable equivalent path on the 2D plane, we can get the
+shortest optimal path, the magenta color curve lp(1,6,11,16)
+shown in Fig. 2 (b). Finally, we use the equivalent coordinate
+transformation to get the surface optimal path from the robot
+R’s initial position (nssg ) to the target T’s position (nstg ),
+the magenta color curve les(1,6,11,16) shown in Fig. 2(c). And
+the magenta color curve is on the surface, not above or below
+the surface.
+    From Algorithm 2, we can see utilizing the extended Dijk-                          It can be seen from Fig. 3 that only the optimal path
+stra algorithm, the surface smooth optimal path can be gotten.                      obtained by the extended algorithm proposed in this paper
+Therefore, in principle, the surface optimal path solved by this                    is smooth and the optimal paths obtained by the other three
+proposed method is more accurate and shorter than the sur-                          algorithms are all non-smooth paths composed of polyline
+face optimal path solved by the traditional Dijkstra algorithm                      segments. The optimal path obtained by the algorithm pro-
+with the same nodes number.                                                         posed in this paper is based on a triangular mesh surface,
+    Furthermore, the traditional Dijkstra algorithm optimal                         while the optimal path obtained by the other three algo-
+path is not a true path that falls on a triangulation mesh, and                     rithms is the space Euclidean distance or Manhattan distance
+may often have path segments above or below the triangula-                          between the nodes. Therefore, the paths obtained by the other
+tion mesh. When the robot tracks along with the traditional                         three algorithms all have line segments higher or lower than
+Dijkstra algorithm optimal path, it cannot travel higher or                         the triangle surface. On the one hand, it causes errors in path
+lower than the curved surface and must travel against the                           calculation, and on the other hand, it will cause problems
+curved surface (Refer to the detailed diagram in Fig. 2 (b),                        such as malfunction or loss of direction when the robot is
+lts(6,11) is the Euclidean space distance between node 6 and                        walking. More accurate paths have practical significance and
+node 11, which is higher than the equivalent triangle blocks                        value for occasions with higher precision requirements, such
+1s(6,7,10) and 1s(7,10,11) , not on these two triangles). Accord-                   as surgical operations on fine surfaces or finishing on surfaces
+ingly, the actual path length with the traditional Dijkstra                         and other occasions with high error requirements.
+algorithm optimal path will be much larger than the theory                             From Fig. 3 and Table 1, the optimal paths acquired by the
+or simulation path length. The further the path is traveled or                      extended Dijkstra algorithm introduced in this paper are the
+the greater the curvature of the curved surface, the greater                        shortest. As the number of nodes and the distance per-unit
+the actual travel path is larger than the theoretical simulation                    length increase, the path difference between the traditional
+path. And this path error is caused by a sharp bump or a                            Dijkstra algorithm and the algorithm proposed in this paper
+large depression on the map, which may cause malfunctions                           also increases, and the maximum error is about 4.91%. The
+such as the robot loses the direction of travel or walks on the                     maximum error of the path difference between the algorithm
+wrong route. The improved Dijkstra algorithm optimal path                           proposed in [5] and the algorithm in this paper is about
+is a true path that falls on an equivalent angulation mesh, so it                   7.77%, and the maximum error of the path obtained by the A*
+is only slightly little different from the surface path of the real                 algorithm and the algorithm in this paper is about 4.92%. The
+robot. On the same surface with the same number of nodes,                           side length of each square (per-unit scale) is taken as 0.25 in
+the extended algorithm proposed in this paper can get a more                        Fig. 3 (a). In Fig. 3 (b), the side length of each square is 0.5,
+accurate and smoother optimal path.                                                 and in Fig.3 (c), it is 1.5.
+    To further illustrate the characteristics of the extended                          When comparing these four algorithms in this paper,
+algorithm in this paper, here is a comparative analysis of                          we can see that the purpose of the traditional Dijkstra algo-
+four algorithms, as shown in Fig. 3 and Table 1. The                                rithm is mainly to find the shortest path between nodes based
+four algorithms for comparative analysis are the extended                           on the Euclidean space distance. Literature [5] introduces
+Dijkstra algorithm presented in this paper (magenta solid                           the extended Dijkstra algorithm to select a flatter optimal
+curve), the traditional Dijkstra algorithm (black solid curve),                     path based on factors such as the shortest path, elevation
+the extended algorithm introduced in literature [5] (green                          difference, and ground smoothness. The A* algorithm is
+dotted curve), and the A* algorithm (blue dotted curve). For                        based on a reasonable selection of heuristic functions, and the
+the extended algorithm proposed in [5], we comprehensively                          search time for the shortest path is shorter than the traditional
+compared the simulation results of various factor parameter                         Dijkstra algorithm. And the extended algorithm proposed in
+schemes proposed in the article [5], and finally selected the                       this paper can get a smoother and shorter optimal path of
+
+VOLUME 8, 2020                                                                                                                                 147833
+                                                                    M. Luo et al.: Surface Optimal Path Planning Using an Extended Dijkstra Algorithm
+
+
+
+
+                                                                         TABLE 2. 1-robot 1-target surface optimal path comparison.
+
+
+
+
+FIGURE 4. 1089 nodes example. (a) The extended Dijkstra algorithm
+method. (b) The traditional Dijkstra algorithm method.
+
+
+the surface than the shortest path obtained by the traditional
+Dijkstra algorithm. Both the curves in Figure 3 and the data
+in Table 1 confirm the effectiveness of the algorithm in this
+paper.
+
+IV. MATLAB SIMULATION VERIFICATION                                       FIGURE 5. 2401 nodes example. (a) The extended Dijkstra algorithm
+                                                                         method. (b) The traditional Dijkstra algorithm method.
+In this section, the MATLAB examples will further verify
+the effectiveness of this extended Dijkstra algorithm. First, 1-         The magenta color curve in Fig. 4 (a) shows the optimal path
+robot 1-target surface path planning simulation experiments              calculated by the extended Dijkstra algorithm. It is smoother
+with large numbers of nodes by the extended Dijkstra algo-               than the black curve shown in Fig. 4 (b) obtained by the
+rithm are conducted and compared the simulation results with             traditional Dijkstra algorithm. And the optimal path length
+the traditional Dijkstra algorithm simulation optimal path               in magenta color is about 11.812, it is shorter than the black
+solutions. Furthermore, the simulation experiments of multi-             color optimal curve length 12.582.
+robot and multi-target path planning are carried out. After                 We do a 2401 nodes surface simulation example exper-
+many experiments, the results show that the improved Dijk-               iment in Fig. 5. The robot’s initial coordinate position
+stra algorithm introduced in this paper can provide smoother             in Fig. 5 is [0, 1, 1.133], the target position is [6, 7, 1.142],
+and shorter paths in 1-robot 1-target and multi-robot multi-             shown in Table 2. The magenta color optimal path length
+target path planning tasks compared with the traditional Dijk-           by the extended Dijkstra algorithm is about 8.798, and it is
+stra algorithm.                                                          shorter than the black color optimal curve length 10.818 by
+   In the Figs in this section, the red polygons are obstructions        the traditional Dijkstra algorithm, too.
+where the mobile robot cannot travel, and the other areas                   A 4225 nodes surface path planning example is in Fig. 6.
+inside the map boundary are passable. The robot is R and                 Table 2 exhibits the data of the simulation experiment. A con-
+the target is T in the Figs. The extended Dijkstra algorithm             clusion drawn from the comparison of experimental data
+surface optimal path curve is in magenta, the black curve                in Table 2 is that the extended Dijkstra algorithm is superior
+indicates the traditional Dijkstra algorithm surface optimal             to the traditional Dijkstra algorithm in solving the 1-robot
+path.                                                                    1-target shortest path of the surface with large numbers
+                                                                         of nodes, the extended Dijkstra algorithm optimal path is
+A. 1-ROBOT 1-TARGET SURFACE PATH PLANNING                                smoother and shorter. From Table 2, the maximum differ-
+Firstly, we perform 1-robot 1-target surface path planning               ence rate between the traditional Dijkstra algorithm and the
+Matlab simulation experiments with large numbers of nodes.               extended Dijkstra algorithm is about 22.96%. The side length
+We use the Delaunay Triangulation Algorithm to build the                 of each square (per-unit scale) is 0.25 in Fig. 4 and Fig. 6, and
+surface environment with the required resolution in this                 the per-unit scale is 0.125 in Fig. 5.
+section. And Algorithm 2’s logic theory is employed to solve
+the surface optimal path.                                                B. MULTI-ROBOT MULTI-TARGET SURFACE PATH
+   In Fig. 4, we do a 1089 nodes surface simulation example              PLANNING
+experiment. The robot initial position is [0, 1, 0.120], and the         Next, we perform multi-robot multi-target surface path
+target coordinate position is [8, 9, 1.190], as shown in Table 2.        planning Matlab simulation experiments. We extend
+
+147834                                                                                                                                 VOLUME 8, 2020
+M. Luo et al.: Surface Optimal Path Planning Using an Extended Dijkstra Algorithm
+
+
+
+
+FIGURE 6. 4225 nodes example. (a) The extended Dijkstra algorithm                   FIGURE 8. 289 nodes 1-robot 3-target example. (a) The extended Dijkstra
+method. (b) The traditional Dijkstra algorithm method.                              algorithm method. (b) The traditional Dijkstra algorithm method.
+
+
+
+
+                                                                                    FIGURE 9. 625 nodes 1-robot 2-target example. (a) The extended Dijkstra
+                                                                                    algorithm method. (b) The traditional Dijkstra algorithm method.
+FIGURE 7. 625 nodes 2-robot 1-target example. (a) The extended dijkstra
+algorithm method. (b) The traditional Dijkstra algorithm method.
+                                                                                       Fig. 8 shows a 289 nodes 1-robot 3-target surface path plan-
+                                                                                    ning example. The R robot’s initial position is [0, 1, 0.12],
+Algorithm 2 to multi-robot multi-target surface path planning                       the T1 position is [8, 9, 1.190], the T2 coordinate position is
+tasks and carry out MATLAB simulation experiments in this                           [5, 4.5, 0.897], and the T3 position is [1.5, 3.5, 0.589], shown
+section, keeping the simulation experiment settings consis-                         in Table 3. The magenta color curve length in Fig. 8 (a) from
+tent with the previous subsection.                                                  R to T1 is about 11.858, the magenta color curve length from
+   In Fig. 7, we do a 625 nodes 2-robot 1-target surface                            T1 to T2 is about 5.615, and the magenta color curve length
+path planning example experiment. The R1 robot’s ini-                               from T2 to T3 is about 4.224. The black color curve length
+tial position is [0, 1, 0.569], the R2 robot’s initial posi-                        in Fig. 8 (b) from R to T1 is about 14.626, the black color
+tion is [2, 5.25, 0.789], and the target coordinate position is                     curve length from T1 to T2 is about 6.398, and the black
+[6, 7, 0.742], as shown in Table 3. The magenta color curve                         color curve length from T2 to T3 is about 4.572. According
+length in Fig. 7 (a) from R1 to T is about 8.956, the magenta                       to the experimental curves and data in Figure 8 and Table 3,
+color curve length in Fig. 7 (a) from R2 to T is about 4.398.                       the optimal paths obtained by the extended Dijkstra algorithm
+And, the black color curve length in Fig. 7 (b) from R1 to T is                     are always shorter and smoother than the optimal paths cal-
+about 11.853, the black color curve length in Fig. 7 (b) from                       culated by the traditional Dijkstra algorithm, too.
+R2 to T is 4.732. So, according to the experimental curves and                         Fig. 9 shows a 625 nodes 1-robot 2-target surface path
+data in Figure 7 and Table 3, the optimal paths obtained by                         planning example. Fig. 10 is a 289 nodes 3-robot 2-target
+the extended Dijkstra algorithm are shorter than the optimal                        surface example. Fig. 11 is a 441 nodes 3-robot 2-target sur-
+paths calculated by the traditional Dijkstra algorithm.                             face example. The experimental data are all filled in Table 3.
+
+VOLUME 8, 2020                                                                                                                                      147835
+                                                                            M. Luo et al.: Surface Optimal Path Planning Using an Extended Dijkstra Algorithm
+
+
+
+
+TABLE 3. Multi-robot multi-target surface optimal path comparison.
+
+
+
+
+FIGURE 10. 289 nodes 3-robot 2-target example. (a) The extended                  FIGURE 11. Comparion graph of 4225 nodes example. (a) The extended
+Dijkstra algorithm method. (b) The traditional Dijkstra algorithm method.        Dijkstra algorithm method. (b) The traditional Dijkstra algorithm method.
+
+
+
+According to the experimental curves in these three fig-
+ures and the simulation data in Table 3, it is easy to prove                     multi-robot multi-object path planning task, the extended
+that the extended Dijkstra algorithm proposed by this subsec-                    algorithm can obtain a more accurate and smoother optimal
+tion can obtain a more accurate and shorter surface optimal                      path than the traditional algorithm, and usually, the path
+path than the traditional Dijkstra method. From Table 3,                         obtained by the extended algorithm is shorter.
+the maximum difference rate between the traditional Dijkstra
+algorithm and the extended Dijkstra algorithm is 32.35%.                         V. CONCLUSION
+The per-unit scale is 0.25 in Fig. 7, Fig. 9, and Fig. 11, and                   To improve the error of the traditional Dijkstra algorithm
+in Fig. 8 and Fig. 10, the per-unit scale is 0.5.                                when studying the surface optimal path task, we introduce
+   The above simulation results show that the improved                           the extended Dijkstra algorithm. The reason for the error of
+Dijkstra algorithm can still effectively calculate the optimal                   the traditional Dijkstra algorithm in researching the optimal
+path of the surface in multi-robot and multi-target scenarios.                   path task of the surface is that it uses the Euclidean dis-
+Moreover, compared with the traditional algorithm, the curve                     tance algorithm to calculate the path length between adjacent
+is smoother and the path is always shorter.                                      nodes. This is not a problem for the optimal path of a two-
+   The simulation research in this section finds that whether                    dimensional plane, but it will produce errors for the optimal
+it is a single-robot single-object path planning task or a                       path of a surface. Nowadays, more and more application
+
+147836                                                                                                                                         VOLUME 8, 2020
+M. Luo et al.: Surface Optimal Path Planning Using an Extended Dijkstra Algorithm
+
+
+
+
+scenarios want to find the optimal path of the surface. There-                         [8] A. H. M. Santos, R. M. D. Lima, C. R. S. Pereira, R. Osis,
+fore, it is necessary to expand the research on the traditional                            G. O. S. Medeiros, A. R. D. Queiroz, B. K. Flauzino, A. R. P. C. Cardoso,
+                                                                                           L. C. Junior, R. A. D. Santos, and E. L. C. Junior, ‘‘Optimizing routing and
+optimal path algorithm to meet the needs of the new era.                                   tower spotting of electricity transmission lines: An integration of geograph-
+   In this paper, we first introduce an improved Dijkstra                                  ical data and engineering aspects into decision-making,’’ Electr. Power
+algorithm approach to solve the optimal path of the surface.                               Syst. Res., vol. 176, pp. 1–12, Jul. 2019, doi: 10.1016/j.epsr.2019.105953.
+                                                                                       [9] J. Balado, L. Díaz-Vilariño, P. Arias, and H. Lorenzo, ‘‘Point clouds
+We utilize the Delaunay triangulation method to model the                                  for direct pedestrian pathfinding in urban environments,’’ ISPRS
+surface environment. On the Delaunay triangulation map,                                    J. Photogramm. Remote Sens., vol. 148, pp. 184–196, Feb. 2019,
+we keep the triangular side length unchanged when trans-                                   doi: 10.1016/j.isprsjprs.2019.01.004.
+                                                                                      [10] J. Tang, G. Chen, X. Li, and J. P. Coon, ‘‘Route selection based on
+forming the triangular mesh on the surface into the corre-                                 connectivity-delay-trust in public safety networks,’’ IEEE Syst. J., vol. 13,
+sponding triangle in the two-dimensional plane. Through the                                no. 2, pp. 1567–1576, Jun. 2019, doi: 10.1109/JSYST.2018.2813929.
+previous transformation, we attain the robot’s accessible pas-                        [11] L. Yu, D. Kong, X. Shao, and X. Yan, ‘‘A path planning and navigation
+                                                                                           control system design for driverless electric bus,’’ IEEE Access, vol. 6,
+sages of the two-dimensional plane. Solve the shortest path in                             pp. 53960–53975, 2018, doi: 10.1109/ACCESS.2018.2868339.
+the two-dimensional plane, and then find the corresponding                            [12] Z. Zhang, Q. Guo, J. Chen, and P. Yuan, ‘‘Collision-free route plan-
+shortest path on the surface through equivalent coordinate                                 ning for multiple AGVs in an automated warehouse based on col-
+inverse transformation.                                                                    lision classification,’’ IEEE Access, vol. 6, pp. 26022–26035, 2018,
+                                                                                           doi: 10.1109/ACCESS.2018.2819199.
+   Compared with the traditional Dijkstra algorithm, this                             [13] F. Dalkäç, Y. Doäan, D. Birant, R. A. Kut, and R. Yälmaz, ‘‘A grad-
+approach extended the Dijkstra algorithm’s research scope                                  ual approach for multimodel journey planning: A case study in izmir,
+to the surface path planning field. The improved algorithm                                 turkey,’’ J. Adv. Transp., vol. 2017, pp. 1–14, 2017, doi: 10.1155/32017/
+                                                                                           5656323.
+is suitable for the single-robot single-target project and the                        [14] S. Shao, W. Guan, B. Ran, Z. He, and J. Bi, ‘‘Electric vehicle rout-
+multi-robot multi-target project. And, compared with the tra-                              ing problem with charging time and variable travel time,’’ Math. Prob-
+ditional Dijkstra algorithm, the extended Dijkstra algorithm                               lems Eng., vol. 2017, Jan. 2017, Art. no. 5098183, doi: 10.1155/2017/
+                                                                                           5098183.
+can acquire more accurate and shorter surface optimal path,                           [15] G. K. D. Saharidis, D. Rizopoulos, A. Fragkogios, and C. Chatzigeorgiou,
+which is demonstrated by the different MATLAB simulation                                   ‘‘A hybrid approach to the problem of journey planning with the use of
+examples in complex surface environments.                                                  mathematical programming and modern techniques,’’ Transp. Res. Proce-
+                                                                                           dia, vol. 24, pp. 401–409, Oct. 2017, doi: 10.1016/j.trpro.2017.05.094.
+   The smoother and shorter path obtained in this paper comes
+                                                                                      [16] T. Zhi and Z. Hui, ‘‘An improved ant colony routing algorithm for WSNs,’’
+at the expense of increased time cost. In the future, we will                              J. Sensors, vol. 2015, pp. 1–4, Dec. 2015, doi: 10.1155/2015/438290.
+combine the work of reducing time cost in the literature [31]                         [17] W. C. Lu, M. T. Lee, and M. W. Wang, ‘‘Route planning for light-sport
+to further study the method of reducing the time cost of                                   aircraft in constrained airspace,’’ Procedia Eng., vol. 67, pp. 140–146,
+                                                                                           2013, doi: 10.1016/j.proeng.2013.12.013.
+this algorithm, so that the algorithm can be used in practical                        [18] D. Gautam and C. Ha, ‘‘Control of a quadrotor using a smart self-
+research more conveniently and quickly.                                                    tuning fuzzy PID controller,’’ Int. J. Adv. Robotic Syst., vol. 10, pp. 1–9,
+                                                                                           Aug. 2013, doi: 10.5772/56911.
+                                                                                      [19] T.-H. Kim and I.-C. Park, ‘‘High-throughput and area-efficient MIMO
+REFERENCES                                                                                 symbol detection based on modified Dijkstra’s search,’’ IEEE Trans.
+                                                                                           Circuits Syst. I, Reg. Papers, vol. 57, no. 7, pp. 1756–1766, Jul. 2010,
+ [1] K. Wei, Y. Gao, W. Zhang, and S. Lin, ‘‘A modified Dijkstra’s algorithm for
+                                                                                           doi: 10.1109/TCSI.2009.2034235.
+     solving the problem of finding the maximum load path,’’ in Proc. IEEE 2nd
+                                                                                      [20] Z. Pan, L. Yan, A. C. Winstanley, A. S. Fotheringham, and J. Zheng,
+     Int. Conf. Inf. Comput. Technol. (ICICT), Kahului, HI, USA, Mar. 2019,
+                                                                                           ‘‘A 2-D ESPO algorithm and its application in pedestrian path planning
+     pp. 10–13, doi: 10.1109/INFOCT.2019.8711024.
+                                                                                           considering human behavior,’’ in Proc. 3rd Int. Conf. Multimedia Ubiqui-
+ [2] A. Alyasin, E. I. Abbas, and S. D. Hasan, ‘‘An efficient optimal path                 tous Eng., Qingdao, China, Jun. 2009, pp. 485–491, doi: 10.1109/MUE.
+     finding for mobile robot based on dijkstra method,’’ in Proc. 4th Sci-                2009.86.
+     entific Int. Conf. Najaf (SICN), Al-Najef, Iraq, Apr. 2019, pp. 11–14,
+                                                                                      [21] A. Chen, A. K.-S. Wong, and C.-T. Lea, ‘‘Routing and time-slot assignment
+     doi: 10.1109/SICN47020.2019.9019345.
+                                                                                           in optical TDM networks,’’ IEEE J. Sel. Areas Commun., vol. 22, no. 9,
+ [3] Yujin and G. Xiaoxue, ‘‘Optimal route planning of parking lot                         pp. 1648–1657, Nov. 2004, doi: 10.1109/JSAC.2004.833832.
+     based on dijkstra algorithm,’’ in Proc. Int. Conf. Robots Intell. Syst.          [22] Bast, Mehlhorn, Schäfer, and Tamaki, ‘‘A heuristic for Dijkstra’s algorithm
+     (ICRIS), Huai’an, China, Oct. 2017, pp. 221–224, doi: 10.1109/ICRIS.                  with many targets and its use in weighted matching algorithms,’’ Algorith-
+     2017.62.                                                                              mica, vol. 36, no. 1, pp. 75–88, May 2003, doi: 10.1007/s00453-002-1008-
+ [4] M. A. Djojo and K. Karyono, ‘‘Computational load analysis of dijk-                    z.
+     stra, A, and floyd-warshall algorithms in mesh network,’’ in Proc.               [23] M. Noto and H. Sato, ‘‘A method for the shortest path search by
+     Int. Conf. Robot., Biomimetics, Intell. Comput. Syst., Jogjakarta, IN,                extended Dijkstra algorithm,’’ in Proc. IEEE Int. Conf. Syst., Man
+     USA, Nov. 2013, pp. 104–108, doi: 10.1109/ROBIONETICS.2013.                           Cybern., Nashville, TN, USA, Oct. 2000, pp. 2316–2320, doi: 10.1109/
+     6743587.                                                                              ICSMC.2000.886462.
+ [5] W. Fink, V. R. Baker, A. J.-W. Brooks, M. Flammia, J. M. Dohm, and               [24] D. Cavendish and M. Gerla, ‘‘On routing with QOS constraints in ATM
+     M. A. Tarbell, ‘‘Globally optimal rover traverse planning in 3D using                 networks,’’ in The International Federation for Information Processing,
+     Dijkstra’s algorithm for multi-objective deployment scenarios,’’ Planet.              A. Tantawy, Ed. Boston, MA, USA: Springer, 1994.
+     Space Sci., vol. 179, pp. 1–9, Dec. 2019, doi: 10.1016/j.pss.2019.               [25] R. V. Helgason, J. L. Kennington, and B. D. Stewart, ‘‘The one-to-one
+     104707.                                                                               shortest-path problem: An empirical analysis with the two-tree dijkstra
+ [6] D. Guo, J. Wang, J. B. Zhao, F. Sun, S. Gao, C. D. Li, M. H. Li, and C. C. Li,        algorithm,’’ Comput. Optim. Appl., vol. 2, no. 1, pp. 47–75, Jun. 1993,
+     ‘‘A vehicle path planning method based on a dynamic traffic network that              doi: 10.1007/BF01299142.
+     considers fuel consumption and emissions,’’ Sci. Total Environ., vol. 663,       [26] R. B. K. Dewar, S. M. Merritt, and M. Sharir, ‘‘Some modified algorithms
+     pp. 935–943, May 2019, doi: 10.1016/j.scitotenv.2019.01.222.                          for Dijkstra’s longest upsequence problem,’’ Acta Inf., vol. 18, no. 1,
+ [7] F. R. Souza, T. R. Cámara, V. F. N. Torres, B. Nader, and                             pp. 1–15, Feb. 1982, doi: 10.1007/BF00625277.
+     R. Galery, ‘‘Mine fleet cost evaluation–Dijkstra’s optimized path,’’             [27] M. Liu, ‘‘Robotic online path planning on point cloud,’’ IEEE Trans.
+     REM—Int. Eng. J., vol. 72, no. 2, pp. 321–328, Jun. 2019, doi: 10.1590/               Cybern., vol. 46, no. 5, pp. 1217–1228, May 2016, doi: 10.1109/TCYB.
+     0370-44672018720124.                                                                  2015.2430526.
+
+VOLUME 8, 2020                                                                                                                                                 147837
+                                                                                  M. Luo et al.: Surface Optimal Path Planning Using an Extended Dijkstra Algorithm
+
+
+
+
+[28] A. Stumpf, S. Kohlbrecher, D. C. Conner, and O. von Stryk, ‘‘Super-                                         XIAORONG HOU was born in Shanxi, China,
+     vised footstep planning for humanoid robots in rough terrain tasks                                          in 1966.
+     using a black box walking controller,’’ in Proc. IEEE-RAS Int. Conf.                                           He is currently a Professor with the School of
+     Humanoid Robots, Madrid, India, Nov. 2014, pp. 287–294, doi: 10.1109/                                       Automation Engineering, University of Electronic
+     HUMANOIDS.2014.7041374.                                                                                     Science and Technology of China. He has pub-
+[29] C.-C. Sun, G. E. Jan, S.-W. Leu, K.-C. Yang, and Y.-C. Chen, ‘‘Near-                                        lished over 90 research articles and two mono-
+     Shortest path planning on a quadratic surface with O(n log n) time,’’ IEEE                                  graphs. His research interests include control
+     Sensors J., vol. 15, no. 11, pp. 6079–6080, Nov. 2015, doi: 10.1109/JSEN.
+                                                                                                                 theory, intelligent systems, symbolic computation,
+     2015.2464271.
+                                                                                                                 and real algebraic geometry.
+[30] Z. Shiller and J. C. Chen, ‘‘Optimal motion planning of autonomous
+     vehicles in three dimensional Terrains,’’ in Proc. Int. Conf. Robot.
+     Autom., Cincinnati, OH, USA, 1990, pp. 198–203, doi: 10.1109/
+     ROBOT.1990.125972.
+[31] M. Luo, X. Hou, and S. X. Yang, ‘‘A multi-scale map method
+     based on bioinspired neural network algorithm for robot path plan-
+     ning,’’ IEEE Access, vol. 7, pp. 142682–142691, 2019, doi: 10.1109/
+     ACCESS.2019.2943009.
+
+
+
+                         MIN LUO was born in Sichuan, China, in 1978.
+                         She received the B.S. degree in automation from
+                         Chongqing University, in 2001, and the M.S.
+                         degree in electrical engineering and information                                        JING YANG was born in Sichuan, China, in 1989.
+                         from Southwest Petroleum University, in 2009.                                              She is currently a Postdoctoral Researcher with
+                         She is currently pursuing the Ph.D. degree in                                           the School of Automation Engineering, University
+                         automation engineering with the University of                                           of Electronic Science and Technology of China.
+                         Electronic Science and Technology of China,                                             Her research interests include nonlinear control
+                         Sichuan.                                                                                theory and fractional-order systems.
+                            Since 2001, she has been a Lecturer with the
+School of Electrical Engineering and Information, Southwest Petroleum
+University. Her research interests include robot path planning and control
+theory and application.
+
+
+
+
+147838                                                                                                                                               VOLUME 8, 2020
+

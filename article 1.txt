@@ -1,0 +1,383 @@
+                                                                                                                             Full Length Research Article
+                            *Available online at http://www.ajol.info/index.php/njbas/index                 ISSN 0794-5698
+                         Nigerian Journal of Basic and Applied Science (June, 2021), 29(1): 43-48
+                                       DOI: http://dx.doi.org/10.4314/njbas.v29i1.5
+
+
+
+      Comparative Analysis between Selection Sort and Merge Sort Algorithms
+
+                      *1A. M. Rabiu, 2E. J. Garba, 3B. Y. Baha and 4M. I. Mukhtar
+                            1Computer  Science Department, Federal University, Dutse, Nigeria
+                2Computer   Science Department, Modibbo Adama University of Technology, Yola, Nigeria
+             3Department of Information Technology, Modibbo Adama University of Technology, Yola, Nigeria
+                         4Department of Software Engineering, Bayero University, Kano, Nigeria
+
+                     [*Corresponding Author: E-mail: mambas86@fud.edu.ng; : +2348036408434]
+ABSTRACT
+Sorting and merging are two problems that commonly arise in Computer Science especially in data
+processing tasks. To solve these problems, several algorithms have been developed. Similarly, existing
+merge and sorting algorithms have been improved to provide more efficient and accurate results. In this
+paper, selection and merging algorithms were developed on an octa-core processing machine using
+System.nanoTime methods in Java in order to compare their running times. The results obtained show
+that Merge Sort performs far better than selection sort with careful implementations by taking advantage
+of multiple processing cores in the test machine and some concurrency utility in Java. It was concluded
+that implementing algorithms using a machine with multiple numbers of cores in their Central Processing
+Unit (CPU) will result in a significant improvement in the performance of both algorithms.
+Keywords: Algorithms, Concurrency, Machine, Merging, Running Time, Sorting.
+
+INTRODUCTION                                                          Zhuoer et al. 2011; Zongli, 2010; Sengupta,
+Two of the common problems in data                                    2007). The time complexity of linear search was
+processing and computer science, in general,                          in the order of O(n) while that of binary search
+are sorting and merging algorithms. Sorting                           is in the order of O(log n) (Knuth, 1997; Thomas
+refers to the arrangement of data in statistical                      et al., 2004; Ankit and Chadha, 2014; Mishra
+order either in increasing, decreasing or                             and Garg, 2008). Different parallel algorithms
+lexicographical order while merging on the                            for linear algebra were explained and the
+other hand employs a divide and                                       results show that performance improvement
+conquer approach to sort a given array of                             could be achieved by careful implementation of
+elements (Rabiu et al., 2018; Robert, 2002).                          some parallelization techniques (Aleksandar,
+There are many merging and sorting algorithms                         2014).
+that have been developed to solve the
+problems of merging and sorting large data. So                        To show how the performance improvement
+also older sorting and merging algorithms have                        could be achieved two concurrency frameworks
+been improved upon to lower their running                             namely: “ServExecSort” and “NaïveParallelSort”
+times and increase their speed to make them                           were compared on multi-core machines. The
+more efficient (Rabiu et al., 2018). Some of the                      results show that the “ServExecSort framework”
+sorting algorithms were developed as non-                             performs far better than “NaïveParallelSort”
+comparison-based sorts and it was further                             (Rabiu et al., 2020). Some selected machine
+established that quicksort is a better sorting                        algorithms used to predict cardiovascular
+algorithm than selection sort (Robert, 2002).                         disease were surveyed and their performances
+                                                                      were compared. Investigation on the 18 types
+Performance of quicksort is better than that of                       of research so far conducted shows that
+selection sort (Thomas et al., 2004) and Shell                        Decision Tree (DT)-J48 NB (Naïve Bayes) NB,
+sort was far better than selection sort (Adhikari                     and Support Vector Machine (SVM) appeared
+and Pooja, 2007; Muhammad et al, 2017;                                more frequently with RF having the least
+Göetz et al., 2006). Linear search is also known                      frequency. It was concluded that no single
+as a sequential searching algorithm while                             algorithm would be generalized to be the best in
+binary search, in contrast, is based on the                           Cardio Vascular Disease (CVD) prediction
+divide and conquer approach (Knuth, 1997;                             (Yahaya et al., 2020). Multicore processors can
+
+                                                              43
+      Rabiu et al. Comparative Analysis between Selection Sort and Merge Sort Algorithms
+
+be used to improve the performance of                   Java Development Kit (JDK)
+concurrent applications (Kaya, 1995; Ganesh             The JDK 10 version was used in the
+and Sondhi, 2018). Most of the literature               development of the two algorithms in this paper.
+reviewed focused on measuring the                       They were found to be more efficient than the
+performance of algorithms by considering some           previous version of JDK because of the new
+factors such as memory space and time                   features included that could be fully utilized to
+complexities only to measure their                      achieve good results.
+performances, failing to take full advantage of
+multi-core processors and newer concurrency             Array Data Structure
+mechanisms to develop and improve the                   The data structure used in this research is the
+performance of these algorithms. To fill in the         array data structure as shown in Table 1. An
+gap, this paper took advantage of multiple              integer was generated to fill the array with data.
+processing cores in an octa-core machine to             This structure contained an array size ranging
+measure the running times of selection and              from 5000 to 70,000. The increase in the
+merging algorithms to compare their running             number of test runs is to minimize the effects of
+times so as to establish co-relation between the        background programs that can affects
+numbers of processing cores and the                     measurement       thereby       minimizing    the
+performance gain.                                       overheads.
+
+MATERIAL AND METHOD                                     Table 1: Defined array data structure
+Hardware Specifications
+                                                        NO OF RUNS ARRAY SIZE(N)
+The following hardware specifications were
+used for benchmarking in this paper. Firstly, a            1000        5,000
+single-core computer with 1.5Hz Core,                      2000       10,000
+Windows 7 Operating System 32bits (OS) was                 3000       20,000
+used to develop and run the program. That                  4000       30,000
+gave us the basis for comparison with the                  5000       40,000
+results obtained using machines with a higher              6000       50,000
+number of processing cores. Computer with                  7000       60,000
+eight processing cores in its CPU was then                 8000       70,000
+used on Windows 8, 64 bits Operating System,
+having a frequency of 1GHz each, 2GB (64bit),           Data Generation
+Disk space 20GB (64bit) to develop the two              Having defined the size of the array, it was then
+algorithms of choice.                                   filled with the appropriate data type suitable for
+                                                        merging and selection of elements.32-bit
+Software Specifications                                 integer was used in this paper. This is because
+Concurrency Tools                                       int (integer) in Java can contain positive values
+All concurrency mechanisms used to develop              ( -1) ranging from 1 to about 2.1 billion and
+the algorithms in this paper were those                 was found to be more appropriate with defined
+provided by the Java programming language.              array structure used in this paper.
+They included a thread pool for the creation and
+                                                        Algorithm Benchmarking
+management of threads, a framework for
+                                                        Two built-in functions are mostly used to
+asynchronous and synchronizations of threads
+                                                        measure the start and the end time in java.
+and task executions such as counting
+                                                        Namely:      System.currentTimeMillis()   and
+semaphores, lock, atomic and condition
+                                                        System.nanoTime() methods. Since this paper
+variables.
+                                                        is interested in measuring the running time of
+                                                        algorithms only, System.nanoTime() method
+                                                        was the method used to measure the running
+                                                        times of both the merging and selection
+
+
+                                                   44
+              Nigerian Journal of Basic and Applied Science (June, 2021), 29(1): 43-48
+
+algorithms. System.nanoTime() gives more                            RESULTS
+precise results suitable for comparison.                            Performance Analysis of Selection
+                                                                    Running time of selection sort algorithm using a
+Selection Sort Algorithms                                           different number of array sizes and test runs is
+Selection sort is one of the comparison-based                       shown in Table 2. For each array size number
+sorting algorithms. It checks an array of                           of runs was repeated several times. The
+elements and tries to find the smallest element                     number of run was varied as the size of the
+in the array. It then exchanges the smallest                        array increases. The reason for doing this is to
+element with the element in the first position.                     minimize the effects of the background program
+After finishing this step, this algorithm tries to                  in our measurements and to summarize the
+select the smallest element from the unsorted                       collections of test runs by a single typical value
+part of the array after each iteration is carried                   suitable for comparison.
+out. It then exchanges the selected smallest
+element with the element in the unsorted part of                    Table 2: Running times of selection sort
+the array. This process continues until all                         algorithm
+elements in the array are completely sorted
+(Aliyu and Zirra, 2013; Mishra and Garg, 2008).                      NO OF     ARRAY          RUNNING
+                                                                     RUNS      SIZE(N)        TIME(SEC)
+Pseudo-code of Selection Sort according to
+                                                                      1000        5,000           0.392
+Insertion Sort (2019)
+                                                                      2000       10,000           0.712
+         i←1                                                          3000       20,000           2.140
+         while i < length(A)                                          4000       30,000           4.765
+         j←i                                                          5000       40,000           9.182
+         while j > 0 and A[j-1] > A[j]                                6000       50,000          13.311
+         swap A[j] and A[j-1]                                         7000       60,000          19.302
+         j←j-1                                                        8000       70,000          23.465
+         end while
+         i←i+1
+         end while                                                  80,000
+                                                                    70,000
+                                                                    60,000
+Performance Analysis of Merge Sort                                                                        Array
+                                                      Arrray Size
+
+
+
+
+                                                                    50,000
+Merge Sort employs the “divide and                                  40,000
+                                                                                                          size(n)
+conquer approach” to sort a given array of                          30,000                                Running
+elements. “It works by dividing the input array                     20,000                                time(sec)
+into two halves, and then merge-sort recursively                    10,000
+calls itself for the two halves and merges the                           0
+result of the two sorted halves” (Geeks for                                  1 2 3 4 5 6 7 8
+Geeks, 2019).                                                                 Running Times (sec)
+
+ “Merge-Sort (arr [], l, k), If k> l
+    Step 1: Determine the middle element so as
+ to dividethe array into two halves                                 Figure 1: Running times of selection sort
+         Middle M = (l+k)/2                                             algorithm
+    Step2: Call the Merge-sort for the 1st half:
+         Call the merge-sort (arr, l, M)
+    Step3: Call the Merge-sort for the 2nd half:
+          Merge-sort (arr, M+1, k)
+    Step 4: Merge the two sorted halves in step
+ 2 and step 3:
+           Call the Merge (arr, l, M, k)”
+                (Geeks for Geeks, 2019)
+
+
+
+
+                                                     45
+                         Rabiu et al. Comparative Analysis between Selection Sort and Merge Sort Algorithms
+
+           Table 3: Running times of merge sort
+           algorithms                                                                       25
+
+
+
+
+                                                                       number of elements
+           NO OF ARRAY RUNNING                                                              20
+
+
+
+
+                                                                          (thausands)
+                                                                                                               Running
+           RUNS SIZE(N) TIME(SEC)                                                                              time of
+                                                                                            15
+            1000       5,000       0.019                                                                       Selection
+            2000      10,000       0.040                                                    10                 Sort (sec)
+
+            3000      20,000       0.073                                                     5                 Running
+            4000      30,000       0.134                                                     0
+                                                                                                               time of
+                                                                                                               Merge Sort
+            5000      40,000       0.170
+
+
+
+
+                                                                                                  5,000
+                                                                                                 10,000
+                                                                                                 20,000
+                                                                                                 30,000
+                                                                                                 40,000
+                                                                                                 50,000
+                                                                                                 60,000
+                                                                                                 70,000
+                                                                                                               (sec)
+            6000      50,000       0.192
+            7000      60,000       0.205                                                          Array size
+            8000      70,000       0.512
+                                                                      Figure 3: Performance of selection sort and
+                      80,000                                               merge sort algorithms
+ Number of elements
+
+
+
+
+                                                                      When the array sizes sorted were around
+                      60,000
+                                                                      10,000 the time taken is 0.712s and when the
+    (thausands)
+
+
+
+
+                                                     Array            array size increases to 20,000 the time taken to
+                      40,000                         size(n)
+                                                     Running          sort the given array increases to 2.140s. The
+                      20,000                         time(sec)        difference between the two sorting times is
+                                                                      1.428s which is almost 1.5 times. It can also be
+                          0
+                                                                      observed that when the array size increases
+                               1 2 3 4 5 6 7 8
+                               Running Times (sec)                    from 30,000 to 40,000 elements with the
+                                                                      corresponding running time of 4.765s and
+Figure 2: Running times of merge sort algorithm                       9.182s respectively, the difference between the
+                                                                      two running times is approximately four times.
+Table 4: Performance comparisons between                              Unfortunately, when the size of the array is
+        selection sort and merge sort algorithms                      doubled, the time required for sorting it with
+            ARRAY              RUNNING TIME     RUNNING TIME          selection sort increases four times, making it
+            SIZE               OF SELECTION     OF MERGE
+                               SORT (sec)       SORT (sec)
+                                                                      less effective.
+         5,000                   0.392           0.019
+        10,000                   0.712           0.040
+                                                                      Therefore, increasing the size of the array by a
+        20,000                   2.140           0.073                factor of 2 will lead to the corresponding
+        30,000                   4.765           0.134                increase in the sorting times by a factor of 200
+        40,000                   9.182           0.170                using selection sort. These can be observed
+        50,000                  13.311           0.192                from the results obtained in Table 2 and Figure
+        60,000                  19.302           0.205
+        70,000                  23.465           0.512
+                                                                      1 respectively. From Table 3, Figure 2, Table 4,
+                                                                      and Figure 3 it can be similarly observed that
+           DISCUSSION                                                 the merging sort algorithm exhibits better
+           From Table 2, and Figure 1, it is noticeable that          performances on both smaller and larger array
+                                                                      sizes as compared to the Selection sort
+           the running times of selection sort increase as
+                                                                      algorithm throughout the sorting process. This
+           the size of the array. This is in accordance with          is in agreement with the findings made by
+           the findings of Rabiu et al. (2018). Therefore, it         Rabiu et al. (2020) and Aliyu and Zirra, (2013)
+           can be observed that the times it takes to sort a          that the performance of algorithms is a factor of
+           given element in the array are dependent upon              the input size of the array. It can be seen from
+           the number of elements within the array using              Figure 4 that algorithms whose “time
+           selection sort                                             complexity” is in the order of O (n log(n)) exhibit
+                                                                      better performances when compared with those
+                                                                      algorithms whose time complexity is in the
+                                                                      order of O( ) as in the case of selection sort.
+
+                                                                 46
+             Nigerian Journal of Basic and Applied Science (June, 2021), 29(1): 43-48
+
+This is in line with the findings of Aliyu and            and suggestions on how to improve on their
+Zirra, (2013); Rabiu et al. (2018); Thomas et al.,        contents.
+2004; Ankit and Chadha, 2014; Mishra and
+Garg, 2008) that the order in which complexity            REFERENCES
+of a given algorithm is defined determines the            Adhikari, P. & Pooja, A. (2007). Review of
+efficiency of that particular algorithm. Based on                  sorting algorithms: A comparative study
+the results obtained, and the comparisons                          of two sorting algorithms. Mississippi
+made so far, from Table 2, Table 3, Table 4,                       State, Mississippi Press, Pp. 20-24.
+Figure 1, Figure 2, and Figure 3, suppose that            Aleksandar, V. (2014). Manual parallelization
+both merge sort and selection sort algorithms                      versus state-of-the-art: parallelization
+take 0.712s to sort an array of 10,000 elements                    techniques.
+on the same octa-core machine. Then, it would             Ankit, R. & Chadha, (2014). Modified binary
+take about 0.712 × 150, which equals 106.8s                        search algorithm. International Journal
+which is less than two minutes to sort a million                   of Applied Information Systems,
+array sizes. However, it would take selection                      (IJAIS), 7(13): 1-10.
+sort more than two hours to sort the same array           Aliyu, A. M. & Zirra, P. B. (2013). A comparative
+elements. Hence, it is worth time and effort to                    analysis of sorting algorithms on
+spend several hours learning about a better                        integer and character arrays. The
+algorithm no matter its complexity than using a                    International Journal of Engineering
+simpler one which could be learned in less time.                   and Science, .2(7): 25-30.
+                                                          Ganesh, A. & Sondhi, G. (2018). An overview of
+CONCLUSION                                                         multi-core. International Journal of
+From the results obtained so far, it can be                        Innovative Science and Research
+concluded that merge sort is the better sorting                    Technology, 3(4): 261-263.
+algorithm considering the size of the data sets           Geeks for Geeks. (2019). Merge sorting
+used throughout the experiment. Secondly,                          algorithms. Pp.1-10. Retrieved from:
+increasing the processing core also increases                      https://www.geeksforgeeks.org/merge-
+the performance of both the selection and                          sort/. Accessed 3rd Jan., 2020.
+merge sort algorithms. It was also concluded              Göetz, B., Peierls, T., Bloch, J., Bowbeer, J.,
+further that the order of complexity of an                         David, H., & Lea, D. (2006). Java
+algorithm determines its efficiency. Other                         concurrency in practice. Addison,
+popular algorithms such as quick-sorts, heap-                      Wesley Professional. Pp. 1-10.
+sort, and insertion-sort have the potentials to           Insertion Sort (2019). Insertion Sort. Retrived
+exhibit similar behaviour and performances                         from:
+using the same approaches on different test                        https://en.wikipedia.org/wiki/Insertion_s
+machines with a different number of processing                     ort.Accessed 23rd Mar. 2018.
+cores in their CPUs. Hence, these algorithms              Kaya, D. (1995). Parallel algorithms for
+and other popular ones deserve further                             numerical linear algebra on a shared
+research to see if they can give the same                          memory       multiprocessor [Doctorate
+results when measured on different machines.                       Thesis].The University of Newcastle
+                                                                   Upon Tyne Department of Computing
+ACKNOWLEDGEMENTS                                                   Science, 1-123.
+We must acknowledge the efforts and                       Knuth, D.E. (1997). The art of computer
+contributions of the former Director of                            programming, sorting and searching
+Information and Communication Technology                           (3rd ed.). New York, Addison Wasley,
+(ICT) Federal University, Dutse, Jigawa State,                     Pp. 395-409.
+Nigeria, in the person of Prof. Ahmed Baita               Mishra, A. D., & Garg, D. (2008). Selection of
+Garko who despite his tight schedules took his                     the best sorting algorithm. International
+time to go through this, and other related                         Journal of Intelligent Information
+manuscripts to make some recommendations                           Processing, 2(2): 363-368.
+
+
+                                                     47
+      Rabiu et al. Comparative Analysis between Selection Sort and Merge Sort Algorithms
+
+Muhammad R. A., Harith Z., Farouk S., Dauda             Suleiman, A. K. (2013). Review on sorting
+        B. (2017). Comparison of bubble sort                     algorithms: A comparative study.
+        and selection sort with their enhanced                   International Journal of Computer
+        versions. Department of Electrical                       Science and Security (IJCSS),
+        Engineering Univeristy of Lahore,                        3(7):120-126.
+        Pakistan.1-10.                                  Thomas, H. C., Charles, E. L., Ronald, L. R. &
+Rabiu, A.M., Garko, A.B., &Abdullahi, A.M.                       Clifford, S. (2004). Introduction to
+        (2018).Effects of multi-core processors                  Algorithms (4th Ed.).NY: Addison-
+        on linearand binary              sorting                 Wesley Professional, 50-51.
+        algorithms.Dutse Journal of Pure and            Yahaya, L., Hassan, I. & Rabiu, A.M. (2020). A
+        Applied Sciences, 2(4):130-140                           survey of performance of some
+Rabiu, A.M., Garba, E.G., Baha, B.Y. &                           selected machine          learning
+        Mukhtar, M.I. (2020). Optimizing                         algorithms for cardiovascular disease
+        frameworks for building more efficient                   predictions. BIMA Journal of Science
+        concurrent application in Java.Islamic                   and       Technology, 4(1): 165-180.
+        University Multidisciplinary Journal            Zhuoer, L., Chenghong, Z., & Yunfa, H. (2011).
+        (IUMJ), 7(2):348-355.                                    Backwards search algorithm of double-
+Rabiu, A.M., Garko, A.B., Abdullahi, A.M, Umar,                  sorted inter-relevant successive trees.
+        H.A., & Babagana, M. (2018).                             Fifth International Conference on Fuzzy
+        Performance evaluation of three quick-                   Systems and Knowledge Discovery,
+        sorting algorithms on single and multi-                  3(23):2-12.
+        core processors. Dutse Journal of Pure          Zongli, J. (2010). A tag feedback based sorting
+        and Applied Sciences 2(4), 254-263.                      algorithms      for    social     search.
+Robert, L. (2002). Data structures and                           International Conference on System
+        algorithms in java (3rd Ed).Retrieved                    and Informatics, (ICSAI2012),3(2): 12-
+        from:http://www.resaechgate.net.Acces                    32.
+        sed 2nd Oct. 2018.
+Sengupta, D. L. (2007). Algorithms in java
+        (3rded.). New York, A. Wasley, Pp. 5-
+        23.
+
+
+
+
+                                                   48
