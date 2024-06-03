@@ -1,0 +1,2 @@
+Boyer-Moore algorithm is the fastest for all of the 4 presented cases, second fastest is Knuth-Morris-Pratt algorithm and by far the slowest is Rabin-Karp.
+Algorythms take more time to find made up string 
